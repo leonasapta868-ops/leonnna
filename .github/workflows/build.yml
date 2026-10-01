@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-
   workflow_dispatch:
 
 jobs:
@@ -12,16 +11,20 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install MinGW
+      - name: Setup MinGW
         run: |
           choco install mingw -y
 
       - name: Build EXE
         run: |
-          g++ leona.cpp -std=c++17 -O2 -o main.exe
+          g++ leona.cpp -std=c++17 -O2 -static -static-libgcc -static-libstdc++ -o main.exe
+
+      - name: Check EXE
+        run: |
+          dir main.exe
 
       - name: Upload EXE
         uses: actions/upload-artifact@v4
